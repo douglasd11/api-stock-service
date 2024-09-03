@@ -12,6 +12,7 @@ import com.pragma_2024_2.api_stock_service.domain.model.Category;
 import com.pragma_2024_2.api_stock_service.domain.spi.ICategoryPersistencePort;
 
 
+import com.pragma_2024_2.api_stock_service.domain.util.Constants;
 import com.pragma_2024_2.api_stock_service.domain.util.CustomPage;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -122,10 +123,10 @@ class CategoryUseCaseTest {
         //GIVEN
         CustomPage<Category> categories =
                 new CustomPage<>(List.of(TestData.getCategory()), 0, 10, 1, 1, true, false);
-        given(categoryPersistencePort.getAllCategories(0, 10, "asc")).willReturn(categories);
+        given(categoryPersistencePort.getAllCategories(0, 10, Constants.ORDER_ASC)).willReturn(categories);
 
         //WHEN
-        CustomPage<Category> result = categoryUseCase.getAllCategories(0, 10, "asc");
+        CustomPage<Category> result = categoryUseCase.getAllCategories(0, 10, Constants.ORDER_ASC);
 
         //THEN
         assertEquals(categories, result);
@@ -136,11 +137,11 @@ class CategoryUseCaseTest {
     void testGetAllCategories_NoDataFound() {
         // GIVEN
         CustomPage<Category> categories = new CustomPage<>();
-        given(categoryPersistencePort.getAllCategories(0, 10, "asc")).willReturn(categories);
+        given(categoryPersistencePort.getAllCategories(0, 10, Constants.ORDER_ASC)).willReturn(categories);
 
         // WHEN & THEN
         assertThrows(NoDataFoundException.class, () ->
-                categoryUseCase.getAllCategories(0, 10, "asc")
+                categoryUseCase.getAllCategories(0, 10, Constants.ORDER_ASC)
         );
     }
 

@@ -53,7 +53,7 @@ public class CategoryRestControllerAdapter {
             @ApiResponse(responseCode = "400", description = "Invalid request parameters", content = @Content),
             @ApiResponse(responseCode = "500", description = "Internal server error", content = @Content)
     })
-    public CategoryPaginationResponseDto<CategoryResponseDto> getAllCategories(
+    public ResponseEntity<CategoryPaginationResponseDto<CategoryResponseDto>> getAllCategories(
             @Parameter(description = "Page number for pagination (0-based index)", example = "0")
             @RequestParam Integer page,
 
@@ -64,7 +64,7 @@ public class CategoryRestControllerAdapter {
             @RequestParam String direction
     ) {
 
-        return categoryResponseMapper.toCategoryPaginationResponseDto(categoryServicePort.getAllCategories(page, size, direction));
+        return ResponseEntity.ok(categoryResponseMapper.toCategoryPaginationResponseDto(categoryServicePort.getAllCategories(page, size, direction)));
     }
 
 }

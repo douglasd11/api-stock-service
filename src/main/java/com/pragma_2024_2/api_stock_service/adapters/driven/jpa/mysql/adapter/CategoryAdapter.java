@@ -50,8 +50,8 @@ public class CategoryAdapter implements ICategoryPersistencePort {
                 categoriesPage.isFirst(),
                 categoriesPage.isLast()
         );
-
     }
+
     @Override
     public Category getCategoryByName(String name) {
         Optional<CategoryEntity> category = categoryRepository.findByName(name);

@@ -6,17 +6,21 @@ import static org.mockito.BDDMockito.given;
 import com.bootcamp_2024_2.api_stock_service.testdata.TestData;
 import com.pragma_2024_2.api_stock_service.adapters.driven.jpa.mysql.exception.CategoryAlreadyExistsException;
 import com.pragma_2024_2.api_stock_service.adapters.driven.jpa.mysql.exception.ElementNotFoundException;
+import com.pragma_2024_2.api_stock_service.adapters.driven.jpa.mysql.exception.NoDataFoundException;
 import com.pragma_2024_2.api_stock_service.domain.api.usecase.CategoryUseCase;
 import com.pragma_2024_2.api_stock_service.domain.model.Category;
 import com.pragma_2024_2.api_stock_service.domain.spi.ICategoryPersistencePort;
 
 
+import com.pragma_2024_2.api_stock_service.domain.util.CustomPage;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+
+import java.util.List;
 
 
 @ExtendWith(MockitoExtension.class)
@@ -109,6 +113,34 @@ class CategoryUseCaseTest {
         // WHEN & THEN
         assertThrows(ElementNotFoundException.class, () ->
                 categoryUseCase.getCategoryById(categoryId)
+        );
+    }
+
+    @Test
+    @DisplayName("Test get all categories when there are categories")
+    void testGetAllCategories() {
+        //GIVEN
+        CustomPage<Category> categories =
+                new CustomPage<>(List.of(TestData.getCategory()), 0, 10, 1, 1, true, false);
+        given(categoryPersistencePort.getAllCategories(0, 10, "asc")).willReturn(categories);
+
+        //WHEN
+        CustomPage<Category> result = categoryUseCase.getAllCategories(0, 10, "asc");
+
+        //THEN
+        assertEquals(categories, result);
+    }
+
+    @Test
+    @DisplayName("Should throw NoDataFoundException when there are no categories")
+    void testGetAllCategories_NoDataFound() {
+        // GIVEN
+        CustomPage<Category> categories = new CustomPage<>();
+        given(categoryPersistencePort.getAllCategories(0, 10, "asc")).willReturn(categories);
+
+        // WHEN & THEN
+        assertThrows(NoDataFoundException.class, () ->
+                categoryUseCase.getAllCategories(0, 10, "asc")
         );
     }
 

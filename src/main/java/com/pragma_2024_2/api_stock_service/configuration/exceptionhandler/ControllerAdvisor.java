@@ -1,5 +1,6 @@
 package com.pragma_2024_2.api_stock_service.configuration.exceptionhandler;
 
+import com.pragma_2024_2.api_stock_service.adapters.driven.jpa.mysql.exception.BrandAlreadyExistsException;
 import com.pragma_2024_2.api_stock_service.adapters.driven.jpa.mysql.exception.CategoryAlreadyExistsException;
 import com.pragma_2024_2.api_stock_service.adapters.driven.jpa.mysql.exception.ElementNotFoundException;
 import com.pragma_2024_2.api_stock_service.adapters.driven.jpa.mysql.exception.NoDataFoundException;
@@ -40,6 +41,17 @@ public class ControllerAdvisor {
         return ResponseEntity.badRequest().body(
                 new ExceptionResponse(
                         Constants.CATEGORY_ALREADY_EXISTS_EXCEPTION_MESSAGE,
+                        HttpStatus.BAD_REQUEST.toString(),
+                        LocalDateTime.now()
+                )
+        );
+    }
+
+    @ExceptionHandler(BrandAlreadyExistsException.class)
+    public ResponseEntity<ExceptionResponse> handleBrandAlreadyExistsException() {
+        return ResponseEntity.badRequest().body(
+                new ExceptionResponse(
+                        Constants.BRAND_ALREADY_EXISTS_EXCEPTION_MESSAGE,
                         HttpStatus.BAD_REQUEST.toString(),
                         LocalDateTime.now()
                 )

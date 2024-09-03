@@ -2,9 +2,12 @@ package com.pragma_2024_2.api_stock_service.domain.api.usecase;
 
 import com.pragma_2024_2.api_stock_service.adapters.driven.jpa.mysql.exception.BrandAlreadyExistsException;
 import com.pragma_2024_2.api_stock_service.adapters.driven.jpa.mysql.exception.ElementNotFoundException;
+import com.pragma_2024_2.api_stock_service.adapters.driven.jpa.mysql.exception.NoDataFoundException;
 import com.pragma_2024_2.api_stock_service.domain.api.IBrandServicePort;
 import com.pragma_2024_2.api_stock_service.domain.model.Brand;
+import com.pragma_2024_2.api_stock_service.domain.model.Category;
 import com.pragma_2024_2.api_stock_service.domain.spi.IBrandPersistencePort;
+import com.pragma_2024_2.api_stock_service.domain.util.CustomPage;
 
 
 public class BrandUseCase implements IBrandServicePort {
@@ -21,6 +24,16 @@ public class BrandUseCase implements IBrandServicePort {
             throw new BrandAlreadyExistsException();
         }
         return brandPersistencePort.saveBrand(brand);
+    }
+
+    @Override
+    public CustomPage<Brand> getAllBrands(Integer page, Integer size, String direction) {
+        CustomPage<Brand> brands = brandPersistencePort.getAllBrands(page, size, direction);
+
+        if (brands.getContent() == null) {
+            throw new NoDataFoundException();
+        }
+        return brandPersistencePort.getAllBrands(page, size, direction);
     }
 
     @Override

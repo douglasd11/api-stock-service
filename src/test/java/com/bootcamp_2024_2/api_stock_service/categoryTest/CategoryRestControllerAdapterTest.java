@@ -78,10 +78,10 @@ class CategoryRestControllerAdapterTest {
         given(categoryResponseMapper.toCategoryPaginationResponseDto(categories)).willReturn(list);
 
         //WHEN
-        CategoryPaginationResponseDto<CategoryResponseDto> response = categoryRestControllerAdapter.getAllCategories(page, size, direction);
+        ResponseEntity<CategoryPaginationResponseDto<CategoryResponseDto>> response = categoryRestControllerAdapter.getAllCategories(page, size, direction);
 
         //THEN
-        assertEquals(list.getContent(), response.getContent());
+        assertEquals(list.getContent(), response.getBody().getContent());
     }
 
 }
